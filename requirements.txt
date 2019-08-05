@@ -1,0 +1,5 @@
+zmq==0.0.0
+configobj==5.0.6
+pytest==3.5.1
+kazoo==2.6.1
+dill==0.3.0
