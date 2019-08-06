@@ -13,6 +13,7 @@ def data_processor():
         lines = f.readlines()
         for l in lines:
             l = l.replace(',', '')
+            l = l.replace('\n', '')
             yield l
 
 
