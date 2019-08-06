@@ -21,6 +21,7 @@ class MapTask:
         self.buffer_size = 0
         self.data = defaultdict(list)
         self._overwrite = True
+        self.stats = {}
 
     def info(self):
         return 'task_name=%s, job_id=%s, task_id=%s, upstream_task_id=%s, ' \
@@ -41,6 +42,10 @@ class MapTask:
 
     def flush(self):
         for p, paris in self.data.items():
+            if p in self.stats:
+                self.stats[p] += len(paris)
+            else:
+                self.stats[p] = len(paris)
             update_func = write if self._overwrite else append
             update_func('%s/%s/partition_%s'%(self.job_id, self.task_id, p), '\n'.join(paris))
         self.buffer_size = 0
@@ -71,6 +76,7 @@ class ReduceTask:
         self.partition_id = partition_id
         self.data = []
         self.result = []
+        self.stats = {}
 
     def info(self):
         return 'task_name=%s, job_id=%s, task_id=%s, upstream_task_id=%s, partition_id=%s, mappers=%s'%(

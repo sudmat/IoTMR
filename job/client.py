@@ -12,13 +12,13 @@ def reduce(k, v):
 
 class MRJob:
 
-    n_partition = 1
 
-    def __init__(self, target_data='', master='127.0.0.1:5000', tasks=None, data_proc=None):
+    def __init__(self, target_data='', master='127.0.0.1:5000', tasks=None, data_proc=None, n_partition=1):
         self.target_data = target_data
         self.outcha = OutChannel(target=master)
         self.tasks = tasks or []
         self.data_proc = data_proc
+        self.n_partition = n_partition
 
     def lineage(self):
         return []

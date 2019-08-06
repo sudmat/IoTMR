@@ -5,6 +5,7 @@ import json
 from job.job_tracker import JobTracker
 import dill
 import codecs
+from storage.file_io import read
 
 class MasterNode:
 
@@ -39,8 +40,10 @@ class MasterNode:
             job_id = self.register_job(job_req=req)
             rep = job_id
         if req['type'] == 'collect':
-            result = self.collect(req['job_id'])
-            rep = result
+            if self.job_trackers[req['job_id']] != 1:
+                rep = ''
+            else:
+                rep = self.collect(req['job_id'])
         return rep
 
     def register_job(self, job_req):
@@ -52,5 +55,5 @@ class MasterNode:
         return job_id
 
     def collect(self, job_id):
-        return self.job_trackers[job_id].collect_result()
+        return read('%s/result'%job_id)
 

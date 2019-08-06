@@ -39,6 +39,9 @@ class WorkNode:
         if req['type'] == 'read_partition':
             data = self.read_partition(req['job_id'], req['task_id'], req['partition_id'])
             rep = {'data': data}
+        if req['type'] == 'read_result':
+            data = self.read_result(req['job_id'], req['task_id'])
+            rep = {'data': data}
         if req['type'] == 'stats':
             rep = self.get_stats()
         return rep
@@ -53,10 +56,12 @@ class WorkNode:
 
     def _execute_task(self, task):
         task.execute()
+        self.zk.create('MR/job/%s/%s/finish/%s' % (task.job_id, task.task_id, self.config['name']), ephemeral=True)
+        self.zk.set('MR/job/%s/%s/finish/%s' % (task.job_id, task.task_id, self.config['name']),
+                    json.dumps(task.stats).encode())
         mutex.acquire()
         self.available_thread += 1
         mutex.release()
-        self.zk.create('MR/job/%s/%s/finish/%s' % (task.job_id, task.task_id, self.config['name']), ephemeral=True)
 
     def register_self(self):
         path1 = '/MR/worker/%s' % self.config['name']
@@ -73,6 +78,11 @@ class WorkNode:
     @staticmethod
     def read_partition(job_id, task_id, partition_id):
         data = read('%s/%s/%s'%(job_id, task_id, partition_id))
+        return data
+
+    @staticmethod
+    def read_result(job_id, task_id):
+        data = read('%s/%s/result' % (job_id, task_id))
         return data
 
     @staticmethod

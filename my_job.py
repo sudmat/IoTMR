@@ -9,7 +9,7 @@ def reduce(k, vs):
     yield k, sum(vs)
 
 def data_processor():
-    with open('words') as f:
+    with open('test_data/words') as f:
         lines = f.readlines()
         for l in lines:
             l = l.replace(',', '')
