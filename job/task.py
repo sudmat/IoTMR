@@ -105,7 +105,7 @@ class ReduceTask:
             for reduced_k, reduced_v in self.reduce_func(cur_k, cur_values):
                 self.result.append('%s, %s' % (reduced_k, reduced_v))
         self.flush()
-        print('start executing reduce task. task_info=%s' % self.info())
+        print('finish executing reduce task. task_info=%s' % self.info())
 
     def collect_map_result(self):
 
