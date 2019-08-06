@@ -28,7 +28,7 @@ The following are tested on 2 Ubuntu 16.04 machines, one as master node, the oth
 4 Start the process on each work node using "python3 start_worker.py worker1", the second argument is used to specify which configuration item to use when starting this worker. Start all other word nodes in the same way, remember to change the second argument accordingly.
 ![alt text](img/start_worker.png)
 
-5 Write your own mapreduce job and submit it at master node. We have written a sample job named my_job.py, you can submitted it using "python3 my_job.py" (execute this at master node). 
+5 Write your own mapreduce job and submit it at master node. We have written a sample job named my_job.py, which is a simple word count program. Except for map and reduce function, a data_proc function is offered to tell the mapper how to get input data. You can submitted it using "python3 my_job.py" (execute this at master node). 
 ![alt text](img/submit_job.png)
 
 6 You can see the job execution on master node and task execution on work node. After the job is finished, the result will be stored in the tmp directory at master node. You will need to know your job id to locate the corresponding result file.
